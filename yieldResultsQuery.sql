@@ -71,7 +71,7 @@ dividendos_dolarizados as (
 	from negotiation n
 	inner join dividendo d on d.ticker = n.ticker
 	inner join cotacao_dolar cd on cd."data" = d.data_liquidacao 
-	where n.quantidade > 0 and d.data_liquidacao between '2024-01-01' and '2024-12-31'
+	where n.quantidade > 0 and d.data_liquidacao between '2024-07-01' and '2025-06-30'
 ),
 total_dividendos_dolarizados as (
 	select dd.ticker,
@@ -93,6 +93,8 @@ compras as (
 		   n.preco_unitario / cd.valor as precoUnitarioDolarizado
 	from negociacao n
 	inner join cotacao_dolar cd on cd."data"  = n."date"
+	-- nesse trecho não filtro por data para pegar TODAS as compras já realizadas....
+	-- -> mas e se tiver alguma venda no meio do caminho??
 	-- where n."date" between '2022-01-01' and '2022-12-31'
 ),
 total_compras as (

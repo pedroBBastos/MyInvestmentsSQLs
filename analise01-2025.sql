@@ -1,13 +1,4 @@
-select * from ticker_yield_results tyr 
-where 
-	-- y2 > 0.06 and
-	ticker_type = 'FII'
-	--tracked_period = '01/2024 a 12/2024';
-order by ticker ;
-
-select * from dividendo d 
-where ticker = 'TRPL4';
-
+-- ????, n sei em que data fiz isso aqui
 ----------------------------------------------
 /*
 Compras a se analisar:

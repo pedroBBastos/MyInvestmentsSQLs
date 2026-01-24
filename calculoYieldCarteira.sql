@@ -17,7 +17,8 @@ dividendos_dolarizados as (
 	inner join dividendo d on d.ticker = n.ticker
 	inner join cotacao_dolar cd on cd."data" = d.data_liquidacao 
 	where n.quantidade > 0 
-		and d.data_liquidacao between '2024-01-01' and '2024-12-31'
+		and d.data_liquidacao between '2024-07-01' and '2025-06-30'
+		--and d.data_liquidacao between '2024-01-01' and '2024-12-31'
 		--and d.data_liquidacao between '2023-07-01' and '2024-06-30'
 		--and d.data_liquidacao between '2023-01-01' and '2023-12-31'
 		--and d.data_liquidacao between '2022-07-01' and '2023-06-30'
@@ -45,6 +46,11 @@ compras as (
 	-- fazendo aqui com que eu não traga dados de compra de ações que não constam mais em carteira
 	inner join negotiation nn on nn.ticker = n.ticker
 	where nn.quantidade > 0
+		and n."date" < '2024-07-01'
+--		and n."date" < '2024-01-01'
+--		and n."date" < '2023-07-01'
+--		and n."date" < '2023-01-01'
+--		and n."date" < '2022-07-01'
 ),
 -- select * from compras;
 total_compras as (

@@ -13,11 +13,11 @@ SELECT * FROM cotacao_dolar cd ORDER BY DATA DESC ;
 
 SELECT * FROM negociacao n WHERE ticker like "%BPAC%" order by date;
 
-ALTER TABLE ticker_yield_results 
-ADD ticker_type VARCHAR;
-
-ALTER TABLE ticker_yield_results 
-DROP COLUMN tracked_year;
+--ALTER TABLE ticker_yield_results 
+--ADD ticker_type VARCHAR;
+--
+--ALTER TABLE ticker_yield_results 
+--DROP COLUMN tracked_year;
 
 UPDATE ticker_yield_results 
 SET tracked_period = '2023'
@@ -28,11 +28,14 @@ SELECT * FROM ticker_yield_results tyr;
 SELECT * FROM ticker_yield_results tyr
 where ticker = 'EALT4';
 
+select * from ticker_yield_results t 
+where t.ticker_type = 'ACAO';
+
 
 
 UPDATE ticker_yield_results 
-SET ticker_type = 'ACAO'
-WHERE ticker NOT IN ('BTAL11', 'BTRA11', 'HFOF11', 'IRDM11', 'XPPR11',
+SET ticker_type = 'FII'
+WHERE ticker IN ('BTAL11', 'BTRA11', 'HFOF11', 'IRDM11', 'XPPR11',
 					  'MXRF11', 'RBRF11', 'RECR11', 'TRBL11', 'VISC11', 'VSLH11', 'KNCR11',
 					  'GTWR11', 'XPML11', 'GGRC11', 'HGBS11', 'XPIN11', 'GALG11');
 
