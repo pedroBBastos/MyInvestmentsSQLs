@@ -29,14 +29,16 @@ SELECT * FROM ticker_yield_results tyr
 where ticker = 'EALT4';
 
 select * from ticker_yield_results t 
-where t.ticker_type = 'ACAO';
+where t.ticker_type = 'FII' and tracked_period = '';
 
 
 
 UPDATE ticker_yield_results 
-SET ticker_type = 'FII'
-WHERE ticker IN ('BTAL11', 'BTRA11', 'HFOF11', 'IRDM11', 'XPPR11',
+SET ticker_type = 'ACAO'
+WHERE ticker NOT IN ('BTAL11', 'BTRA11', 'HFOF11', 'IRDM11', 'XPPR11',
 					  'MXRF11', 'RBRF11', 'RECR11', 'TRBL11', 'VISC11', 'VSLH11', 'KNCR11',
-					  'GTWR11', 'XPML11', 'GGRC11', 'HGBS11', 'XPIN11', 'GALG11');
+					  'GTWR11', 'XPML11', 'GGRC11', 'HGBS11', 'XPIN11', 'GALG11',
+                      'VGIR11', 'SNAG11', 'CPTS11', 'HCTR11')
+       and ticker_type is null;
 
 -----------

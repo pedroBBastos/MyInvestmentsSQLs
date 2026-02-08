@@ -1,58 +1,3 @@
-select * from negociacao n
---order by n."date" asc;
---order by ticker asc, date;
-where ticker = 'UNIP5';
---delete from negociacao ;
-
-
-
--- BPAC5, como teve desdobramento de ações, o input dos dados não veio correto...
---delete from negociacao
---where ticker = 'ITSA4';
-
-select * from dividendo d
-where ticker = 'TRPL4';
-
-select * from dividendo d
---order by data_liquidacao asc ;
-where ticker = 'TAEE4';
---delete from dividendo ;
-
-select  date_trunc('month', d.data_movimentacao) as movPorMes, 
-		sum(d.lancamento) 
-from dividendo d
-group by date_trunc('month', d.data_movimentacao)
-order by date_trunc('month', d.data_movimentacao);
-
-select cd."data", count(*) from cotacao_dolar cd
---order by id desc ;
-group by data;
-
-select * from cotacao_dolar cd 
-order by "data" ;
-
-select * from cotacao_dolar cd ;
-
-select * from dividendo d2 
-order by data_movimentacao  desc;
-
--- para bater com os dados no site da corretora, por ação...
-select sum(lancamento) from dividendo d
-where ticker = 'PSSA3'
-and d.data_liquidacao between '2023-01-01' and '2023-12-31';
-
-select sum(lancamento) from dividendo d
-where d.data_liquidacao between '2023-01-01' and '2023-12-31';
-
-
---delete from cotacao_dolar;
-
---drop table cotacao_dolar ;
---drop table dividendo ;
---drop table negociacao ;
-
-------------------------------------
-
 with negotiation as (
 	select n.ticker as ticker,
 		   sum(
@@ -71,7 +16,7 @@ dividendos_dolarizados as (
 	from negotiation n
 	inner join dividendo d on d.ticker = n.ticker
 	inner join cotacao_dolar cd on cd."data" = d.data_liquidacao 
-	where n.quantidade > 0 and d.data_liquidacao between '2024-07-01' and '2025-06-30'
+	where n.quantidade > 0 and d.data_liquidacao between '2025-01-01' and '2025-12-31'
 ),
 total_dividendos_dolarizados as (
 	select dd.ticker,
@@ -119,72 +64,42 @@ order by y2 desc;
 -- PETR4 tá dando um y1/y2 muito pequeno para o que foi em 2022....
 --	-->> aaa... acho que para PETR4, tá considerando compras antigas... (que vendi e depois comprei de novo...)
 
-----------------------------------------------------
+-----------------------------------------------
 
+select * from ticker_yield_results
+where ticker_type = 'ACAO'
+order by ticker;
 
 with negotiation as (
 	select n.ticker as ticker,
 		   sum(
 		   		case when n.operacao = 'C' then n.quantidade else -1*n.quantidade end
-		   ) as quantidade   
+		   ) as quantidade
 	from negociacao n
 	group by n.ticker
-),
-dividendos_dolarizados as (
-	select n.ticker as ticker,
-		   n.quantidade as quantidade,
-		   d.data_liquidacao as data_liquidacao,
-		   d.lancamento as lancamento,
-		   cd.valor as valor,
-		   d.lancamento / cd.valor as lacamentoDolarizado
-	from negotiation n
-	inner join dividendo d on d.ticker = n.ticker
-	inner join cotacao_dolar cd on cd."data" = d.data_liquidacao 
-	where n.quantidade > 0 and d.data_liquidacao between '2022-01-01' and '2022-12-31'
 )
-select * from dividendos_dolarizados;
+select tyr.ticker,
+       tyr.y2,
+       tyr.tracked_period
+from ticker_yield_results tyr
+inner join negotiation n on n.ticker = tyr.ticker
+where tyr.ticker_type = 'ACAO' and n.quantidade > 0
+order by tyr.ticker;
 
-
--------------------------------------------------------
-
-
-with agregated as (select * from get_agregated_stocks()),
-		compras as (
-			select n.ticker,
-				   n.quantidade,
-				   n."date",
-				   n.preco_unitario,
-				   CD.id,
-				   cd.valor as fechamentoDolarNoDia,
-				   n.preco_unitario / cd.valor as precoUnitarioDolarizado
-			from negociacao n
-			inner join agregated agregated on agregated.ticker = n.ticker
-			inner join cotacao_dolar cd on cd."data"  = n."date"
-			-- where n."date" between '2022-01-01' and '2022-12-31'
-		)
-		select c.ticker as ticker,
-			   sum(c.preco_unitario*c.quantidade) as total_em_real,
-			   sum(c.precoUnitarioDolarizado*c.quantidade) as total_dolarizado
-		from compras c
-		group by c.ticker;
-
-	
-with blas as (select * from get_agregated_stocks())
-select n.ticker,
-	   n.quantidade,
-	   n."date",
-	   n.preco_unitario,
-	   n.operacao,
-	   CD.id,
-	   cd.valor as fechamentoDolarNoDia,
-	   n.preco_unitario / cd.valor as precoUnitarioDolarizado
-from negociacao n
-inner join blas blas on blas.ticker = n.ticker
-inner join cotacao_dolar cd on cd."data"  = n."date"
-where n.ticker = 'PETR4';
-
-select * from negociacao n where n.ticker = 'PETR4';
-
-----------------
-
-select * from ticker_yield_results tyr ;
+-- BRAP4
+-- BRSR6
+-- BBDC3 e SANB11 - mas BBDC3 tá melhor...
+-- CMIG3/4
+-- CMIN3, apesar de y1 bom ainda, multiplos já altos..
+-- CXSE3, apesar de y1 bom ainda, multiplos já altos..
+-- GRND3, MUITO BOA AINDA...
+-- ISAE3/4
+-- ITSA4, apesar de y1 bom ainda, multiplos já altos..
+-- KLBN11
+-- LEVE3, apesar de y1 bom ainda, multiplos já altos..
+-- MTRE3, MUITO BOA AINDA...
+-- PETR4
+-- RANI3
+-- ROMI3
+-- SLCE3
+-- TAEE11

@@ -19,7 +19,7 @@ dividendos_dolarizados as (
 	from negotiation n
 	inner join dividendo d on d.ticker = n.ticker
 	inner join cotacao_dolar cd on cd."data" = d.data_liquidacao 
-	where n.quantidade > 0 and d.data_liquidacao between '2024-07-01' and '2025-06-30'
+	where n.quantidade > 0 and d.data_liquidacao between '2025-01-01' and '2025-12-31'
 ),
 total_dividendos_dolarizados as (
 	select dd.ticker,
@@ -49,7 +49,7 @@ total_compras as (
 select total_compras.ticker as ticker,
 	   tdd.totaldividendosreal / total_compras.totalreal as y1,
 	   tdd.totaldividendosdolar / total_compras.totaldolar as y2,
-	   '07/2024 a 06/2025' as tracked_period
+	   '01/2025 a 12/2025' as tracked_period
 from total_compras total_compras
 inner join total_dividendos_dolarizados tdd on tdd.ticker = total_compras.ticker -- mudar para left join para considerar papeis que não me deram dividendos_dolarizados
 order by y2 desc;
