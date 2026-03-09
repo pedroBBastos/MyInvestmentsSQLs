@@ -83,7 +83,8 @@ select tyr.ticker,
        tyr.tracked_period
 from ticker_yield_results tyr
 inner join negotiation n on n.ticker = tyr.ticker
-where tyr.ticker_type = 'ACAO' and n.quantidade > 0
+where n.quantidade > 0
+    and tyr.ticker_type = 'ACAO'
 order by tyr.ticker;
 
 -- BRAP4
@@ -103,3 +104,15 @@ order by tyr.ticker;
 -- ROMI3
 -- SLCE3
 -- TAEE11
+
+-- VLID3 é de se pensar
+
+select * from negociacao
+where ticker = 'ROMI3';
+
+select * from negociacao
+where ticker = 'SANB11';
+
+select * from negociacao
+order by date;
+
