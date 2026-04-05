@@ -54,14 +54,4 @@ from total_compras total_compras
 inner join total_dividendos_dolarizados tdd on tdd.ticker = total_compras.ticker -- mudar para left join para considerar papeis que não me deram dividendos_dolarizados
 order by y2 desc;
 
-
-select * from ticker_yield_results tyr ;
-
---ALTER TABLE ticker_yield_results
---add COLUMN tracked_year int;
---
---update ticker_yield_results 
---set tracked_year = 2022;
-
-
-
+select * from ticker_yield_results;
